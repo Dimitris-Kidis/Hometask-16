@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 
 
 // 1. Use encodings in writing to file stream ✅
 // 2. Use string formatting, searching and comparing ✅
-// 3. Use timespan ✅
-// 4. Use datetime ✅
-// 5. Use datetimeoffset ✅
-// 6. Use timezone ✅
-// 7. Use cultureinfo when working with strings & numbers
+// 3. Use TimeSpan ✅
+// 4. Use DateTime ✅
+// 5. Use DateTimeOffset ✅
+// 6. Use TimeZone ✅
+// 7. Use CultureInfo when working with strings & numbers ✅
 // 8. Implement IDisposable
 // 9. Use finalizers
 
@@ -109,6 +110,36 @@ namespace App
             Console.WriteLine(zone.GetUtcOffset(dateOfBirth));
 
             Console.WriteLine("Local time zone: {0}", TimeZoneInfo.Local.DisplayName);
+
+
+            // CultureInfo
+            DateTime dt = new DateTime(2000, 7, 5);
+            CultureInfo infoMD = new CultureInfo("ro-MD");
+            CultureInfo infoUS = new CultureInfo("en-US");
+            Console.WriteLine(dt.ToString(infoMD));
+            Console.WriteLine(dt.ToString(infoUS));
+
+
+            // IDisposable
+            TextReader tr = null;
+            try
+            {
+                tr = new StreamReader(@"C:\Users\dmitrii.romanenco\Downloads\hometask16.txt");
+                string s = tr.ReadToEnd();
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("\nThe content of the file: \n" + s);
+            }
+            catch (Exception ex) { }
+            finally
+            {
+                if (tr != null)
+                {
+                    tr.Dispose();
+                }
+            }
+
+            // Finalizer
+
         }
     }
 
@@ -130,4 +161,32 @@ namespace App
             PhoneNumber = phoneNumber;
         }
     }
+
+
+
+    //public class Base : IDisposable
+    //{
+    //    private bool isDisposed = false;
+    //    public void Dispose()
+    //    {
+    //        Dispose(true);
+    //        GC.SuppressFinalize(this); 
+    //    }
+    //    protected virtual void Dispose(bool disposing)
+    //    {
+    //        if (!isDisposed)
+    //        {
+    //            if (disposing)
+    //            {
+    //            }
+    //        }
+    //        isDisposed = true;
+    //    }
+    //    ~Base()
+    //    {
+    //        Dispose(false);
+    //    }
+    //}
+
+
 }
