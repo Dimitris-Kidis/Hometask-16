@@ -123,6 +123,7 @@ namespace App
 
             // IDisposable & Finalizer
             MyResource someResources = new MyResource(432253, "Bob", "1234567");
+            someResources.Dispose();
 
         }
     }
