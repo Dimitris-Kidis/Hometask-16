@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 
@@ -89,7 +90,7 @@ namespace App
 
             // TimeSpan & DateTime
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\nTimeSpan from now to New Year 2023: "); 
+            Console.WriteLine("\nTimeSpan from now to New Year 2023: ");
             DateTime launchDate = new DateTime(2023, 1, 1, 0, 0, 0);
             DateTime now = DateTime.Now;
             TimeSpan ts = launchDate - now;
@@ -107,7 +108,7 @@ namespace App
             // TimeZone
             TimeZone zone = TimeZone.CurrentTimeZone;
             DateTime dateOfBirth = new DateTime(2000, 7, 5, 15, 0, 0);
-            Console.WriteLine(zone.GetUtcOffset(dateOfBirth));
+            Console.WriteLine("\n" + zone.GetUtcOffset(dateOfBirth));
 
             Console.WriteLine("Local time zone: {0}", TimeZoneInfo.Local.DisplayName);
 
@@ -116,29 +117,12 @@ namespace App
             DateTime dt = new DateTime(2000, 7, 5);
             CultureInfo infoMD = new CultureInfo("ro-MD");
             CultureInfo infoUS = new CultureInfo("en-US");
-            Console.WriteLine(dt.ToString(infoMD));
+            Console.WriteLine("\n" + dt.ToString(infoMD));
             Console.WriteLine(dt.ToString(infoUS));
 
 
-            // IDisposable
-            TextReader tr = null;
-            try
-            {
-                tr = new StreamReader(@"C:\Users\dmitrii.romanenco\Downloads\hometask16.txt");
-                string s = tr.ReadToEnd();
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine("\nThe content of the file: \n" + s);
-            }
-            catch (Exception ex) { }
-            finally
-            {
-                if (tr != null)
-                {
-                    tr.Dispose();
-                }
-            }
-
-            // Finalizer
+            // IDisposable & Finalizer
+            MyResource someResources = new MyResource(432253, "Bob", "1234567");
 
         }
     }
@@ -162,31 +146,46 @@ namespace App
         }
     }
 
+    public class MyResource : IDisposable
+    {
+        // Allegedly external unmanaged resources
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        // Disposed Flag
+        private bool disposed = false;
 
+        public MyResource(int id, string name, string pass)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Password = pass;
+        }
 
-    //public class Base : IDisposable
-    //{
-    //    private bool isDisposed = false;
-    //    public void Dispose()
-    //    {
-    //        Dispose(true);
-    //        GC.SuppressFinalize(this); 
-    //    }
-    //    protected virtual void Dispose(bool disposing)
-    //    {
-    //        if (!isDisposed)
-    //        {
-    //            if (disposing)
-    //            {
-    //            }
-    //        }
-    //        isDisposed = true;
-    //    }
-    //    ~Base()
-    //    {
-    //        Dispose(false);
-    //    }
-    //}
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    Id = 0;
+                    Name = String.Empty;
+                    Password = String.Empty;
+                }
+                disposed = true;
+            }
+        }
+
+        ~MyResource()
+        {
+            Dispose(false);
+        }
+    }
 
 }
