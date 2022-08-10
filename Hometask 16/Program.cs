@@ -12,8 +12,8 @@ using System.Text;
 // 5. Use DateTimeOffset ✅
 // 6. Use TimeZone ✅
 // 7. Use CultureInfo when working with strings & numbers ✅
-// 8. Implement IDisposable
-// 9. Use finalizers
+// 8. Implement IDisposable ✅
+// 9. Use finalizers ✅
 
 
 
@@ -127,6 +127,7 @@ namespace App
         }
     }
 
+
     class Person
     {
         public string Name { get; set; }
@@ -145,6 +146,8 @@ namespace App
             PhoneNumber = phoneNumber;
         }
     }
+
+
 
     public class MyResource : IDisposable
     {
